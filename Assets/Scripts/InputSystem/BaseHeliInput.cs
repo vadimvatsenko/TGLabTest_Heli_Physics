@@ -7,21 +7,18 @@ namespace InputSystem
     {
     
         // W/S Нахиляють ніс вертольота вниз або вгору (рух або гальма). - Pitch
-        private float vertical = 0f;
-    
         // A/D Нахил в ліво або право - Roll
-        private float horizontal = 0f;
-    
         // throttleInput - ручка газу / Керування потужністю двигуна
-        private float _throttleInput = 0f;
-    
+        public float ThrottleInput { get; private set; } = 0f;
+
         // collective - загальний кут установки лопатей несного гвинта, керування висотою
-        private float _collectiveInput = 0f;
-    
-        private float _cyclicInput = 0f;
+        public float CollectiveInput { get; private set; } = 0f;
+
+        public float CyclicInput { get; private set; } = 0f;
+
         // pedalInput - поворот ліво чи право, хвіст
-        private float _pedalInput = 0f;
-    
+        public float PedalInput { get; private set; } = 0f;
+
         private InputSystem_Actions _inputSystemActions;
     
         private void OnEnable()
@@ -35,20 +32,15 @@ namespace InputSystem
         private void OnMovementPerformed(InputAction.CallbackContext context)
         {
             Vector2 inputVector = context.ReadValue<Vector2>();
-        
-            horizontal = inputVector.x;
-            vertical = inputVector.y;
-            Debug.Log(horizontal + " " + vertical);
             
-            _throttleInput = vertical;
-            _pedalInput = horizontal;
-            
+            ThrottleInput = inputVector.y;
+            PedalInput = inputVector.x;
         }
 
         private void OnMovementCanceled(InputAction.CallbackContext context)
         {
-            horizontal = 0f;
-            vertical = 0f;
+            ThrottleInput = 0f;
+            PedalInput = 0f;
         }
 
         private void OnDisable()
