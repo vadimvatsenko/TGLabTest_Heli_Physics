@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,23 +6,24 @@ namespace InputSystem
 {
     public class BaseHeliInput : MonoBehaviour
     {
-    
         // Доделать Sensitivity, занадто швидко йде перемикання між одниницею та нулем
-        // W/S Нахиляють ніс вертольота вниз або вгору (рух або гальма). - Pitch
-        // A/D Нахил в ліво або право - Roll
+        [SerializeField] private int delayInput = 4; // зараз дуже швидко йде перемикання 
+        private InputSystem_Actions _inputSystemActions;
+        
         // throttleInput - ручка газу / Керування потужністю двигуна
         public float ThrottleInput { get; private set; } = 0f;
-
+        
         // collective - загальний кут установки лопатей несного гвинта, керування висотою
         public float CollectiveInput { get; private set; } = 0f;
 
+        // W/S Нахиляють ніс вертольота вниз або вгору (рух або гальма). - Pitch
+        // A/D Нахил в ліво або право - Roll
+        // collective - наклони вперед та назад
         public Vector2 CyclicInput { get; private set; } = Vector2.zero;
 
         // pedalInput - поворот ліво чи право, хвіст // Yaw в ТЗ
         public float PedalInput { get; private set; } = 0f;
-
-        private InputSystem_Actions _inputSystemActions;
-    
+        
         private void OnEnable()
         {
             _inputSystemActions = new InputSystem_Actions();
@@ -35,7 +37,7 @@ namespace InputSystem
             _inputSystemActions.Heli.PedalInput.performed += OnPedalInputPerformed;
             _inputSystemActions.Heli.PedalInput.canceled += OnPedalInputCanceled;
         }
-
+        
         private void OnCyclicPerformed(InputAction.CallbackContext context) => CyclicInput = context.ReadValue<Vector2>();
         private void OnCyclicCanceled(InputAction.CallbackContext context) => CyclicInput = Vector2.zero;
         private void OnThrottleInputPerformed(InputAction.CallbackContext context) => ThrottleInput = context.ReadValue<float>();
@@ -57,6 +59,5 @@ namespace InputSystem
             _inputSystemActions.Heli.PedalInput.canceled += OnPedalInputCanceled;
             _inputSystemActions.Disable();
         }
-    
     }
 }
