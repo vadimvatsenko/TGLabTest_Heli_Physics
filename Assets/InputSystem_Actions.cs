@@ -93,10 +93,37 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             ""id"": ""df70fa95-8a34-4494-b137-73ab6b9c7d37"",
             ""actions"": [
                 {
-                    ""name"": ""Movement"",
+                    ""name"": ""CyclicInput"",
                     ""type"": ""Value"",
                     ""id"": ""bf87301c-196c-4afe-aaa3-1ef0a8fd566b"",
                     ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ThrottleInput"",
+                    ""type"": ""Value"",
+                    ""id"": ""084436e4-2e88-4517-b5a5-d0b9021b3d3b"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""CollectiveInput"",
+                    ""type"": ""Value"",
+                    ""id"": ""7746eb73-380e-483b-8d1d-e31f29236db4"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": ""AxisDeadzone"",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PedalInput"",
+                    ""type"": ""Value"",
+                    ""id"": ""a995b993-9790-41b4-98b4-736b37eb05e0"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -110,7 +137,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""CyclicInput"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -121,7 +148,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Movement"",
+                    ""action"": ""CyclicInput"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -132,7 +159,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""CyclicInput"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -143,7 +170,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Movement"",
+                    ""action"": ""CyclicInput"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -154,7 +181,106 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""action"": ""CyclicInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""f7bf04ae-9d9e-438d-8603-752a1d98724f"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThrottleInput"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Positive"",
+                    ""id"": ""0154bfb4-b907-41c0-b4e6-89763b96d547"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThrottleInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Negative"",
+                    ""id"": ""fba0134d-138e-4883-987c-003cc3b8b342"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThrottleInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""dfbb16da-11f0-4564-a74d-49bf7fba912f"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CollectiveInput"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Positive"",
+                    ""id"": ""5e5f6694-cad1-49c0-ad60-83ccd2861c8c"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""CollectiveInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Negative"",
+                    ""id"": ""3a452707-ccff-4f33-b4fa-971119aac53a"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CollectiveInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""ad293deb-3b1d-48a4-a7e3-d7892243c7ce"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalInput"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""70f4954f-c2db-4f50-8979-cb9eeecf58f6"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""b9500390-fdd4-4dc4-a24a-508b0f8b25de"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PedalInput"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -742,7 +868,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
 }");
         // Heli
         m_Heli = asset.FindActionMap("Heli", throwIfNotFound: true);
-        m_Heli_Movement = m_Heli.FindAction("Movement", throwIfNotFound: true);
+        m_Heli_CyclicInput = m_Heli.FindAction("CyclicInput", throwIfNotFound: true);
+        m_Heli_ThrottleInput = m_Heli.FindAction("ThrottleInput", throwIfNotFound: true);
+        m_Heli_CollectiveInput = m_Heli.FindAction("CollectiveInput", throwIfNotFound: true);
+        m_Heli_PedalInput = m_Heli.FindAction("PedalInput", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -836,7 +965,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     // Heli
     private readonly InputActionMap m_Heli;
     private List<IHeliActions> m_HeliActionsCallbackInterfaces = new List<IHeliActions>();
-    private readonly InputAction m_Heli_Movement;
+    private readonly InputAction m_Heli_CyclicInput;
+    private readonly InputAction m_Heli_ThrottleInput;
+    private readonly InputAction m_Heli_CollectiveInput;
+    private readonly InputAction m_Heli_PedalInput;
     /// <summary>
     /// Provides access to input actions defined in input action map "Heli".
     /// </summary>
@@ -849,9 +981,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public HeliActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "Heli/Movement".
+        /// Provides access to the underlying input action "Heli/CyclicInput".
         /// </summary>
-        public InputAction @Movement => m_Wrapper.m_Heli_Movement;
+        public InputAction @CyclicInput => m_Wrapper.m_Heli_CyclicInput;
+        /// <summary>
+        /// Provides access to the underlying input action "Heli/ThrottleInput".
+        /// </summary>
+        public InputAction @ThrottleInput => m_Wrapper.m_Heli_ThrottleInput;
+        /// <summary>
+        /// Provides access to the underlying input action "Heli/CollectiveInput".
+        /// </summary>
+        public InputAction @CollectiveInput => m_Wrapper.m_Heli_CollectiveInput;
+        /// <summary>
+        /// Provides access to the underlying input action "Heli/PedalInput".
+        /// </summary>
+        public InputAction @PedalInput => m_Wrapper.m_Heli_PedalInput;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -878,9 +1022,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_HeliActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_HeliActionsCallbackInterfaces.Add(instance);
-            @Movement.started += instance.OnMovement;
-            @Movement.performed += instance.OnMovement;
-            @Movement.canceled += instance.OnMovement;
+            @CyclicInput.started += instance.OnCyclicInput;
+            @CyclicInput.performed += instance.OnCyclicInput;
+            @CyclicInput.canceled += instance.OnCyclicInput;
+            @ThrottleInput.started += instance.OnThrottleInput;
+            @ThrottleInput.performed += instance.OnThrottleInput;
+            @ThrottleInput.canceled += instance.OnThrottleInput;
+            @CollectiveInput.started += instance.OnCollectiveInput;
+            @CollectiveInput.performed += instance.OnCollectiveInput;
+            @CollectiveInput.canceled += instance.OnCollectiveInput;
+            @PedalInput.started += instance.OnPedalInput;
+            @PedalInput.performed += instance.OnPedalInput;
+            @PedalInput.canceled += instance.OnPedalInput;
         }
 
         /// <summary>
@@ -892,9 +1045,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="HeliActions" />
         private void UnregisterCallbacks(IHeliActions instance)
         {
-            @Movement.started -= instance.OnMovement;
-            @Movement.performed -= instance.OnMovement;
-            @Movement.canceled -= instance.OnMovement;
+            @CyclicInput.started -= instance.OnCyclicInput;
+            @CyclicInput.performed -= instance.OnCyclicInput;
+            @CyclicInput.canceled -= instance.OnCyclicInput;
+            @ThrottleInput.started -= instance.OnThrottleInput;
+            @ThrottleInput.performed -= instance.OnThrottleInput;
+            @ThrottleInput.canceled -= instance.OnThrottleInput;
+            @CollectiveInput.started -= instance.OnCollectiveInput;
+            @CollectiveInput.performed -= instance.OnCollectiveInput;
+            @CollectiveInput.canceled -= instance.OnCollectiveInput;
+            @PedalInput.started -= instance.OnPedalInput;
+            @PedalInput.performed -= instance.OnPedalInput;
+            @PedalInput.canceled -= instance.OnPedalInput;
         }
 
         /// <summary>
@@ -1196,12 +1358,33 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     public interface IHeliActions
     {
         /// <summary>
-        /// Method invoked when associated input action "Movement" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "CyclicInput" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnMovement(InputAction.CallbackContext context);
+        void OnCyclicInput(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ThrottleInput" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnThrottleInput(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "CollectiveInput" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCollectiveInput(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PedalInput" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPedalInput(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

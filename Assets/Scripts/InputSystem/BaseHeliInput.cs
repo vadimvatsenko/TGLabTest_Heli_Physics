@@ -6,6 +6,7 @@ namespace InputSystem
     public class BaseHeliInput : MonoBehaviour
     {
     
+        // Доделать Sensitivity, занадто швидко йде перемикання між одниницею та нулем
         // W/S Нахиляють ніс вертольота вниз або вгору (рух або гальма). - Pitch
         // A/D Нахил в ліво або право - Roll
         // throttleInput - ручка газу / Керування потужністю двигуна
@@ -14,9 +15,9 @@ namespace InputSystem
         // collective - загальний кут установки лопатей несного гвинта, керування висотою
         public float CollectiveInput { get; private set; } = 0f;
 
-        public float CyclicInput { get; private set; } = 0f;
+        public Vector2 CyclicInput { get; private set; } = Vector2.zero;
 
-        // pedalInput - поворот ліво чи право, хвіст
+        // pedalInput - поворот ліво чи право, хвіст // Yaw в ТЗ
         public float PedalInput { get; private set; } = 0f;
 
         private InputSystem_Actions _inputSystemActions;
@@ -25,28 +26,35 @@ namespace InputSystem
         {
             _inputSystemActions = new InputSystem_Actions();
             _inputSystemActions.Enable();
-            _inputSystemActions.Heli.Movement.performed += OnMovementPerformed;
-            _inputSystemActions.Heli.Movement.canceled += OnMovementCanceled;
+            _inputSystemActions.Heli.CyclicInput.performed += OnCyclicPerformed;
+            _inputSystemActions.Heli.CyclicInput.canceled += OnCyclicCanceled;
+            _inputSystemActions.Heli.ThrottleInput.performed += OnThrottleInputPerformed;
+            _inputSystemActions.Heli.ThrottleInput.canceled += OnThrottleInputCanceled;
+            _inputSystemActions.Heli.CollectiveInput.performed += OnCollectiveInputPerformed;
+            _inputSystemActions.Heli.CollectiveInput.canceled += OnCollectiveInputCanceled;
+            _inputSystemActions.Heli.PedalInput.performed += OnPedalInputPerformed;
+            _inputSystemActions.Heli.PedalInput.canceled += OnPedalInputCanceled;
         }
 
-        private void OnMovementPerformed(InputAction.CallbackContext context)
-        {
-            Vector2 inputVector = context.ReadValue<Vector2>();
-            
-            ThrottleInput = inputVector.y;
-            PedalInput = inputVector.x;
-        }
-
-        private void OnMovementCanceled(InputAction.CallbackContext context)
-        {
-            ThrottleInput = 0f;
-            PedalInput = 0f;
-        }
+        private void OnCyclicPerformed(InputAction.CallbackContext context) => CyclicInput = context.ReadValue<Vector2>();
+        private void OnCyclicCanceled(InputAction.CallbackContext context) => CyclicInput = Vector2.zero;
+        private void OnThrottleInputPerformed(InputAction.CallbackContext context) => ThrottleInput = context.ReadValue<float>();
+        private void OnThrottleInputCanceled(InputAction.CallbackContext context) => ThrottleInput = 0f;
+        private void OnCollectiveInputPerformed(InputAction.CallbackContext context) => CollectiveInput = context.ReadValue<float>();
+        private void OnCollectiveInputCanceled(InputAction.CallbackContext context) => CollectiveInput = 0f;
+        private void OnPedalInputPerformed(InputAction.CallbackContext context) => PedalInput = context.ReadValue<float>();
+        private void OnPedalInputCanceled(InputAction.CallbackContext context) => PedalInput = 0f;
 
         private void OnDisable()
         {
-            _inputSystemActions.Heli.Movement.performed -= OnMovementPerformed;
-            _inputSystemActions.Heli.Movement.canceled -= OnMovementCanceled;
+            _inputSystemActions.Heli.CyclicInput.performed -= OnCyclicPerformed;
+            _inputSystemActions.Heli.CyclicInput.canceled -= OnCyclicCanceled;
+            _inputSystemActions.Heli.ThrottleInput.performed -= OnThrottleInputPerformed;
+            _inputSystemActions.Heli.ThrottleInput.canceled -= OnThrottleInputCanceled;
+            _inputSystemActions.Heli.CollectiveInput.performed -= OnCollectiveInputPerformed;
+            _inputSystemActions.Heli.CollectiveInput.canceled -= OnCollectiveInputCanceled;
+            _inputSystemActions.Heli.PedalInput.performed += OnPedalInputPerformed;
+            _inputSystemActions.Heli.PedalInput.canceled += OnPedalInputCanceled;
             _inputSystemActions.Disable();
         }
     
