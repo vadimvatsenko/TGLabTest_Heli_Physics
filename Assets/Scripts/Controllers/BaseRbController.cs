@@ -13,6 +13,6 @@ namespace Controllers
             HandlePhysics();
         }
 
-        protected void HandlePhysics() { }
+        protected virtual void HandlePhysics() { }
     }
 }
