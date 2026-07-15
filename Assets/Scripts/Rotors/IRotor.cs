@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface IRotor
 {
-    void UpdateRotor();
+    void UpdateRotor(float dps);
 }

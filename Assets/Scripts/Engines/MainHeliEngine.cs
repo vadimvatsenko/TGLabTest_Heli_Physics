@@ -8,9 +8,10 @@ namespace Engines
         [SerializeField] private float maxHp = 140f;
         // максимальний обертальний момент
         [SerializeField] private float maxRpm = 2700f;
-        [SerializeField] private float powerDelay = 2f;
+        [SerializeField] private float powerDelay = 0.2f;
         
-        [SerializeField] private AnimationCurve powerCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
+        [SerializeField] private AnimationCurve powerCurve 
+            = AnimationCurve.Linear(0f, 0f, 1f, 1f);
         
         // поточна кінська сила
         public float CurrentHp { get; private set; }

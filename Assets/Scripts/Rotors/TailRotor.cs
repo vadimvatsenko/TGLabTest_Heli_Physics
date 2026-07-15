@@ -4,9 +4,10 @@ namespace Rotors
 {
     public class TailRotor : MonoBehaviour, IRotor
     {
-        public void UpdateRotor()
+        [SerializeField] private float tailRotorSpeed = 1.5f;
+        public void UpdateRotor(float dps)
         {
-            Debug.Log("UpdateTailRotor");
+            transform.Rotate(Vector3.right, dps * tailRotorSpeed, Space.Self);
         }
     }
 }

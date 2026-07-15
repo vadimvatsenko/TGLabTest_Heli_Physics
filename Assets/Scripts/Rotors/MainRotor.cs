@@ -4,9 +4,9 @@ namespace Rotors
 {
     public class MainRotor : MonoBehaviour, IRotor
     {
-        public void UpdateRotor()
+        public void UpdateRotor(float dps)
         {
-            Debug.Log("UpdateTailRotor");
+            transform.Rotate(Vector3.up, dps);
         }
     }
 }
