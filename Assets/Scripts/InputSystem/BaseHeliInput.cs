@@ -7,12 +7,14 @@ namespace InputSystem
     public class BaseHeliInput : MonoBehaviour
     {
         // Доделать Sensitivity, занадто швидко йде перемикання між одниницею та нулем
-        [SerializeField] private int delayInput = 4; // зараз дуже швидко йде перемикання 
+        [SerializeField] private float delayInput = 4; // зараз дуже швидко йде перемикання 
         private InputSystem_Actions _inputSystemActions;
         
         // throttleInput - ручка газу / Керування потужністю двигуна
         private float _throttleInputFromInput;
         public float ThrottleInput { get; private set; } = 0f;
+        
+        private bool _isHoldingThrottleInput = false;
         
         // collective - загальний кут установки лопатей несного гвинта, керування висотою
         public float CollectiveInput { get; private set; } = 0f;
@@ -32,27 +34,38 @@ namespace InputSystem
             _inputSystemActions.Heli.CyclicInput.performed += OnCyclicPerformed;
             _inputSystemActions.Heli.CyclicInput.canceled += OnCyclicCanceled;
             _inputSystemActions.Heli.ThrottleInput.performed += OnThrottleInputPerformed;
-            //_inputSystemActions.Heli.ThrottleInput.canceled += OnThrottleInputCanceled;
+            _inputSystemActions.Heli.ThrottleInput.canceled += OnThrottleInputCanceled;
             _inputSystemActions.Heli.CollectiveInput.performed += OnCollectiveInputPerformed;
             _inputSystemActions.Heli.CollectiveInput.canceled += OnCollectiveInputCanceled;
             _inputSystemActions.Heli.PedalInput.performed += OnPedalInputPerformed;
             _inputSystemActions.Heli.PedalInput.canceled += OnPedalInputCanceled;
         }
 
-        private void Update()
+        private void Update() => StickyThrottleInput();
+        
+        // метод залипання швидкості центрального двигуна, тут плавне нарощування швидкості із залипанням
+        private void StickyThrottleInput()
         {
-            ThrottleInput = Mathf.Lerp(ThrottleInput, _throttleInputFromInput, Time.deltaTime * delayInput);
-            //Debug.Log(ThrottleInput);
+            if (_isHoldingThrottleInput)
+            {
+                ThrottleInput += Time.deltaTime * delayInput * _throttleInputFromInput;
+            }
+            
+            ThrottleInput = Mathf.Clamp01(ThrottleInput);
+            Debug.Log(ThrottleInput);
         }
         
         private void OnCyclicPerformed(InputAction.CallbackContext context) 
             => CyclicInput = context.ReadValue<Vector2>();
         private void OnCyclicCanceled(InputAction.CallbackContext context) 
             => CyclicInput = Vector2.zero;
-        private void OnThrottleInputPerformed(InputAction.CallbackContext context) 
-            => _throttleInputFromInput = context.ReadValue<float>();
-        private void OnThrottleInputCanceled(InputAction.CallbackContext context) 
-            => _throttleInputFromInput = 0f;
+        private void OnThrottleInputPerformed(InputAction.CallbackContext context)
+        {
+            _isHoldingThrottleInput = true;
+            _throttleInputFromInput = context.ReadValue<float>();
+            
+        }
+        private void OnThrottleInputCanceled(InputAction.CallbackContext context) => _isHoldingThrottleInput = false;
         private void OnCollectiveInputPerformed(InputAction.CallbackContext context) 
             => CollectiveInput = context.ReadValue<float>();
         private void OnCollectiveInputCanceled(InputAction.CallbackContext context) 
