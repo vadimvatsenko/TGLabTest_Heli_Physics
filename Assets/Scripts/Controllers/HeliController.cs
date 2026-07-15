@@ -1,5 +1,10 @@
-﻿using InputSystem;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Engines;
+using InputSystem;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace Controllers
 {
@@ -7,6 +12,7 @@ namespace Controllers
     public class HeliController : BaseRbController
     {
         private BaseHeliInput _baseHeliInput;
+        [SerializeField] private List<MainHeliEngine> engines;
 
         private void Start()
         {
@@ -18,13 +24,13 @@ namespace Controllers
             HandleEngines();
             HandleCharacteristics();
         }
-
-        protected virtual void HandleCharacteristics()
+        
+        protected virtual void HandleEngines()
         {
-            
+            engines.ForEach(e => e.UpdateEngine(_baseHeliInput.ThrottleInput));
         }
 
-        protected virtual void HandleEngines()
+        protected virtual void HandleCharacteristics()
         {
             
         }

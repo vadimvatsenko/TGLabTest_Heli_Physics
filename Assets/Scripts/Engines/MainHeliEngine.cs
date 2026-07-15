@@ -16,9 +16,18 @@ namespace Engines
         public float CurrentRpm { get; private set; }
         
         // передаємо значення головного двигуна
-        private void UpdateEngine(float throttleInput)
+        public void UpdateEngine(float throttleInput)
         {
+            float t = Time.deltaTime * powerDelay;
+            // розрахунок кінської сили
+            float wantedHp = throttleInput * maxHp;
+            CurrentHp = Mathf.Lerp(CurrentHp, wantedHp, t);
             
+            // розрахунок обертального моменту
+            float wantedRpm = throttleInput * maxRpm;
+            CurrentRpm = Mathf.Lerp(CurrentRpm, wantedRpm, t);
+            
+            Debug.Log(CurrentRpm +  " " + CurrentHp);
         }
     }
 }
