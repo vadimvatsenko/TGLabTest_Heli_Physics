@@ -31,7 +31,6 @@ namespace Engines
             //float wantedRpm = throttleInput * maxRpm;
             float wantedRpm =  powerCurve.Evaluate(throttleInput) * maxRpm;
             CurrentRpm = Mathf.Lerp(CurrentRpm, wantedRpm, t);
-            
         }
     }
 }
