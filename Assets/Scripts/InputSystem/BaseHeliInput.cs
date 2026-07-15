@@ -52,7 +52,7 @@ namespace InputSystem
             }
             
             ThrottleInput = Mathf.Clamp01(ThrottleInput);
-            Debug.Log(ThrottleInput);
+            //Debug.Log(ThrottleInput);
         }
         
         private void OnCyclicPerformed(InputAction.CallbackContext context) 
