@@ -1,7 +1,9 @@
 ﻿using InputSystem;
+using UnityEngine;
 
 namespace Controllers
 {
+    [RequireComponent(typeof(Rigidbody), typeof(BaseHeliInput))]
     public class HeliController : BaseRbController
     {
         private BaseHeliInput _baseHeliInput;

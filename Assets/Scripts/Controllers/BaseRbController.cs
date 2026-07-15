@@ -5,8 +5,17 @@ namespace Controllers
 {
     public class BaseRbController : MonoBehaviour
     {
+        // вага 
+        [SerializeField] private float weight = 500f;
+        // точка гравітації хелі, приблизно центр.
+        [SerializeField] private Transform centerGravity;
         protected Rigidbody Rb;
-        void Start() => Rb = GetComponent<Rigidbody>();
+
+        void Start()
+        {
+            Rb = GetComponent<Rigidbody>();
+            Rb.mass = weight;
+        }
         
         private void FixedUpdate()
         {
