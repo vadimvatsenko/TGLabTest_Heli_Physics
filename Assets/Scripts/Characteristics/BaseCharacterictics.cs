@@ -14,6 +14,10 @@ namespace Characteristics
         [Header("Tail Rotor Properties")] 
         [SerializeField] private float tailForce = 2f;
         
+        [Header("Cyclic Properties")]
+        [SerializeField] private float cyclingForce = 2f;
+        [SerializeField] private float cyclicForceMultiplier = 1000f; //
+        
         // це перший двигун, я передбачаю, що він один
         private MainHeliEngine _heliEngine;
         
@@ -48,7 +52,7 @@ namespace Characteristics
             float normalizedRpm = _heliEngine.CurrentRpm / 6f;
             rb.AddForce(liftForce * (Mathf.Pow(normalizedRpm, 2f) * Mathf.Pow(input.CollectiveInput, 2f)), ForceMode.Force);*/
             
-            // базова сила тяжіння (F = m * g) за Загорданом
+            /*// базова сила тяжіння (F = m * g) за Загорданом
             float gravityForce = Physics.gravity.magnitude * rb.mass;
             // Розраховуємо повну силу .Компенсація ваги + надлишок для зльоту. Максимально можлива тяга гвинта
             float maxPossibleForce = gravityForce + (maxLiftForce * rb.mass);
@@ -75,14 +79,24 @@ namespace Characteristics
             rb.AddForce(liftForceVector, ForceMode.Force);
 
             // Debug-вивід для налаштування (можна вимкнути в релізі)
-            Debug.DrawRay(transform.position, liftForceVector / rb.mass, Color.green);
+            Debug.DrawRay(transform.position, liftForceVector / rb.mass, Color.green);*/
+            
+            Vector3 liftForce = transform.up * (Physics.gravity.magnitude * rb.mass);
+            rb.AddForce(liftForce, ForceMode.Force);
 
         }
 
         protected virtual void HandleCyclic(Rigidbody rb, BaseHeliInput input)
         {
-            //Debug.Log("Cyclic");
+            float cyclicZForce = input.CyclicInput.x * cyclingForce;
+            rb.AddRelativeTorque(Vector3.forward * cyclicZForce, ForceMode.Acceleration);
+            
+            float cyclicXForce = input.CyclicInput.y * cyclingForce;
+            rb.AddRelativeTorque(Vector3.right * cyclicXForce, ForceMode.Acceleration);
+            
         }
+        
+        // поворот по осі
         protected virtual void HandlePedals(Rigidbody rb, BaseHeliInput input)
         {
             rb.AddTorque(transform.up * (input.PedalInput * tailForce), ForceMode.Acceleration);
