@@ -11,7 +11,7 @@ namespace Controllers
         [SerializeField] private Transform centerGravity;
         protected Rigidbody Rb;
 
-        void Start()
+        private void Awake()
         {
             Rb = GetComponent<Rigidbody>();
             Rb.mass = weight;
