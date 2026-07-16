@@ -12,12 +12,12 @@ namespace Controllers
         [SerializeField] private List<MainHeliEngine> engines;
         private BaseHeliInput _baseHeliInput;
         private RotorController _rotorController;
-        private BaseCharacterictics _baseCharacterictics;
+        private BasePhysics _basePhysics;
 
         private void Start()
         {
             _baseHeliInput = GetComponent<BaseHeliInput>();
-            _baseCharacterictics = GetComponent<BaseCharacterictics>();
+            _basePhysics = GetComponent<BasePhysics>();
             _rotorController = GetComponentInChildren<RotorController>();
         }
         
@@ -44,7 +44,7 @@ namespace Controllers
 
         protected virtual void HandleCharacteristics()
         {
-            _baseCharacterictics.UpdateCharacterictics();
+            _basePhysics.UpdateCharacterictics();
         }
     }
 }

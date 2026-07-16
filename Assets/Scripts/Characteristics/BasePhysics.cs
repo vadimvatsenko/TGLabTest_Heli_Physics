@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Characteristics
 {
-    public class BaseCharacterictics : MonoBehaviour
+    public class BasePhysics : MonoBehaviour
     {
         [Header("Lift Properties")] 
         [SerializeField] private float maxLiftForce = 3.0f;
