@@ -20,7 +20,7 @@ namespace Controllers
             float degree = 360f;
             float seconds = 60f;
             float dps = ((rpm * degree) / seconds) * Time.fixedDeltaTime;
-            _rotors.ForEach(r => r.UpdateRotor(dps));
+            _rotors.ForEach(r => r.UpdateRotor(dps, input));
         }
     }
 }
