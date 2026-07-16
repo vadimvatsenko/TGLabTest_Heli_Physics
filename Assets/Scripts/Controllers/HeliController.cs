@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Characteristics;
 using Engines;
 using InputSystem;
 using UnityEngine;
@@ -11,13 +12,15 @@ namespace Controllers
     [RequireComponent(typeof(Rigidbody), typeof(BaseHeliInput))]
     public class HeliController : BaseRbController
     {
+        [SerializeField] private List<MainHeliEngine> engines;
         private BaseHeliInput _baseHeliInput;
         private RotorController _rotorController;
-        [SerializeField] private List<MainHeliEngine> engines;
+        private BaseCharacterictics _baseCharacterictics;
 
         private void Start()
         {
             _baseHeliInput = GetComponent<BaseHeliInput>();
+            _baseCharacterictics = GetComponent<BaseCharacterictics>();
             _rotorController = GetComponentInChildren<RotorController>();
         }
         
@@ -31,7 +34,10 @@ namespace Controllers
         // тут доробити, на випадок якщо декілька двигунів
         private void HandleRotors()
         {
-            _rotorController.UpdateRotor(_baseHeliInput, engines[0].CurrentRpm);
+            foreach (var engine in engines)
+            {
+                _rotorController.UpdateRotor(_baseHeliInput, engine.CurrentRpm);
+            }
         }
 
         protected virtual void HandleEngines()
@@ -41,7 +47,7 @@ namespace Controllers
 
         protected virtual void HandleCharacteristics()
         {
-            
+            _baseCharacterictics.UpdateCharacterictics();
         }
     }
 }
