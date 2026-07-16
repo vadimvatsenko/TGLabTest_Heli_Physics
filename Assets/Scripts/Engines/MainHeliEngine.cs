@@ -11,7 +11,8 @@ namespace Engines
         [SerializeField] private float maxHp = 140f;
         
         [Tooltip("максимальний обертальний момент за хв")]
-        [SerializeField] public float MaxRpm { get; private set; } = 2700f;
+        [SerializeField] float maxRpm = 2700f;
+        public float MaxRpm => maxRpm;
         
         [Tooltip("час у секундах, за який двигун розкручується з 0 до 100%")]
         [SerializeField] private float engineResponseTime = 5.0f;
@@ -25,8 +26,6 @@ namespace Engines
         
         private float _lastSentHp;
         private float _lastSentRpm;
-        
-        
         
         // поточна кінська сила
         public float CurrentHp { get; private set; }

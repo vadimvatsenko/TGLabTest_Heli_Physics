@@ -44,7 +44,7 @@ namespace Controllers
 
         protected virtual void HandleCharacteristics()
         {
-            _baseCharacterictics.UpdateCharacterictics(Rb, _baseHeliInput);
+            _baseCharacterictics.UpdateCharacterictics();
         }
     }
 }
