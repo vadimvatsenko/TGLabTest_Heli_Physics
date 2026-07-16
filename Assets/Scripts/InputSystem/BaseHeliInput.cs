@@ -18,6 +18,8 @@ namespace InputSystem
         
         // collective - загальний кут установки лопатей несного гвинта, керування висотою
         public float CollectiveInput { get; private set; } = 0f;
+        private bool _isHoldingCollectiveInput = false;
+        private float _collectiveInputFromInput;
 
         // W/S Нахиляють ніс вертольота вниз або вгору (рух або гальма). - Pitch
         // A/D Нахил в ліво або право - Roll
@@ -41,7 +43,11 @@ namespace InputSystem
             _inputSystemActions.Heli.PedalInput.canceled += OnPedalInputCanceled;
         }
 
-        private void Update() => StickyThrottleInput();
+        private void Update()
+        {
+            StickyThrottleInput();
+            StickyCollectiveInput();
+        }
         
         // метод залипання швидкості центрального двигуна, тут плавне нарощування швидкості із залипанням
         private void StickyThrottleInput()
@@ -54,6 +60,15 @@ namespace InputSystem
             ThrottleInput = Mathf.Clamp01(ThrottleInput);
             //Debug.Log(ThrottleInput);
         }
+
+        private void StickyCollectiveInput()
+        {
+            if (_isHoldingCollectiveInput)
+            {
+                CollectiveInput += Time.deltaTime * delayInput * _collectiveInputFromInput;
+            }
+            CollectiveInput = Mathf.Clamp01(CollectiveInput);
+        }
         
         private void OnCyclicPerformed(InputAction.CallbackContext context) 
             => CyclicInput = context.ReadValue<Vector2>();
@@ -63,13 +78,16 @@ namespace InputSystem
         {
             _isHoldingThrottleInput = true;
             _throttleInputFromInput = context.ReadValue<float>();
-            
         }
         private void OnThrottleInputCanceled(InputAction.CallbackContext context) => _isHoldingThrottleInput = false;
-        private void OnCollectiveInputPerformed(InputAction.CallbackContext context) 
-            => CollectiveInput = context.ReadValue<float>();
+
+        private void OnCollectiveInputPerformed(InputAction.CallbackContext context)
+        {
+            _isHoldingCollectiveInput = true;
+            _collectiveInputFromInput = context.ReadValue<float>();
+        }
         private void OnCollectiveInputCanceled(InputAction.CallbackContext context) 
-            => CollectiveInput = 0f;
+            => _isHoldingCollectiveInput = false;
         private void OnPedalInputPerformed(InputAction.CallbackContext context) 
             => PedalInput = context.ReadValue<float>();
         private void OnPedalInputCanceled(InputAction.CallbackContext context) 

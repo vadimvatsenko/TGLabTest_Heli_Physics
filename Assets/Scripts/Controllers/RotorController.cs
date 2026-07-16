@@ -15,7 +15,7 @@ namespace Controllers
         }
         public void UpdateRotor(BaseHeliInput input, float rpm)
         {
-            Debug.Log(rpm);
+            //Debug.Log(rpm);
             // рахуємо градуси в секунду (dps)
             float degree = 360f;
             float seconds = 60f;
