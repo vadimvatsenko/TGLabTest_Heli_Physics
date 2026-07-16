@@ -10,12 +10,13 @@ namespace Characteristics
         [SerializeField] private float maxLiftForce = 3.0f;
         [SerializeField] private float maxAltitude = 200f;
         [SerializeField] private float aerodynamicEfficiencyExponent = 0.66f;
+
+        [Header("Tail Rotor Properties")] 
+        [SerializeField] private float tailForce = 2f;
         
         // це перший двигун, я передбачаю, що він один
         private MainHeliEngine _heliEngine;
         
-        
-
         private void Start()
         {
             _heliEngine = GetComponentInChildren<MainHeliEngine>();
@@ -84,7 +85,7 @@ namespace Characteristics
         }
         protected virtual void HandlePedals(Rigidbody rb, BaseHeliInput input)
         {
-            //Debug.Log("Pedals");
+            rb.AddTorque(transform.up * (input.PedalInput * tailForce), ForceMode.Acceleration);
         }
     }
 }
