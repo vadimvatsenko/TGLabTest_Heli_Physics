@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Engines
 {
@@ -7,7 +8,7 @@ namespace Engines
         // максимальне значення кінських сил
         [SerializeField] private float maxHp = 140f;
         // максимальний обертальний момент
-        [SerializeField] private float maxRpm = 2700f;
+        [SerializeField] public float MaxRpm { get; private set; } = 2700f;
         [SerializeField] private float powerDelay = 0.2f;
         
         [SerializeField] private AnimationCurve powerCurve 
@@ -29,7 +30,7 @@ namespace Engines
             
             // розрахунок обертального моменту
             //float wantedRpm = throttleInput * maxRpm;
-            float wantedRpm =  powerCurve.Evaluate(throttleInput) * maxRpm;
+            float wantedRpm =  powerCurve.Evaluate(throttleInput) * MaxRpm;
             CurrentRpm = Mathf.Lerp(CurrentRpm, wantedRpm, t);
         }
     }
