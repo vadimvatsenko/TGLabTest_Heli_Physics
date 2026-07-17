@@ -63,17 +63,14 @@ namespace Characteristics
         /// </summary>>
         protected virtual void HandleLift()
         {
-            CalcLift();
+            AdvincePhysicsLift();
+            //SimplePhysicsLift();
             //FreezeLift();
         }
 
-        private void CalcLift()
+        private void AdvincePhysicsLift()
         {
-            /*Vector3 liftForce = transform.up * ((Physics.gravity.magnitude + maxLiftForce) * rb.mass);
-            float normalizedRpm = _heliEngine.CurrentRpm / 6f;
-            rb.AddForce(liftForce * (Mathf.Pow(normalizedRpm, 2f) * Mathf.Pow(input.CollectiveInput, 2f)), ForceMode.Force);*/
-            
-            // базова сила тяжіння (F = m * g) за Загорданом
+            // 9.81 * 500 = 4905 - базова сила тяжіння (F = m * g) за Загорданом
             float gravityForce = Physics.gravity.magnitude * _rb.mass;
             // Розраховуємо повну силу .Компенсація ваги + надлишок для зльоту. Максимально можлива тяга гвинта
             float maxPossibleForce = gravityForce + (maxLiftForce * _rb.mass);
@@ -103,7 +100,15 @@ namespace Characteristics
             Debug.DrawRay(transform.position, liftForceVector / _rb.mass, Color.green);
         }
 
-        private void FreezeLift()
+        private void SimplePhysicsLift()
+        {
+            Vector3 liftForce = transform.up * ((Physics.gravity.magnitude + maxLiftForce) * _rb.mass);
+            // коєфіціент обертання гвинта 1 до 6
+            float normalizedRpm = _heliEngine.CurrentRpm / 6f;
+            _rb.AddForce(liftForce * (Mathf.Pow(normalizedRpm, 2f) * Mathf.Pow(_input.CollectiveInput, 2f)), ForceMode.Force);
+        }
+
+        private void FreezePhysicsLift()
         {
             Vector3 liftForce = transform.up * (Physics.gravity.magnitude * _rb.mass);
             _rb.AddForce(liftForce, ForceMode.Force);
