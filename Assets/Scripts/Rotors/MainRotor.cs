@@ -1,4 +1,5 @@
-﻿using InputSystem;
+﻿using System;
+using InputSystem;
 using UnityEngine;
 
 namespace Rotors
@@ -10,14 +11,18 @@ namespace Rotors
         [SerializeField] private Transform rRotor;
         // максимальний кут леза
         [SerializeField] private float maxPitch = 35f;
+
+        public Action<float> OnRotate;
         public void UpdateRotor(float dps, BaseHeliInput input)
         {
+            float pitch = input.CollectiveInput * maxPitch;
+            OnRotate?.Invoke(pitch);
             // оберт 
             transform.Rotate(Vector3.up, dps);
             if (lRotor && rRotor)
             {
-                lRotor.localRotation = Quaternion.Euler(0f, 0f, input.CollectiveInput * maxPitch);
-                rRotor.localRotation = Quaternion.Euler(0f, 0f, -input.CollectiveInput * maxPitch);
+                lRotor.localRotation = Quaternion.Euler(0f, 0f, pitch);
+                rRotor.localRotation = Quaternion.Euler(0f, 0f, -pitch);
             }
         }
     }
