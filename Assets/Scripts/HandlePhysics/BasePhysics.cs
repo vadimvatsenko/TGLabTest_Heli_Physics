@@ -59,7 +59,8 @@ namespace HandlePhysics
             // 9.81 * 500 = 4905Н - базова сила тяжіння (F = m * g) (4905 Ньютонів)
             float gravityForce = Physics.gravity.magnitude * _rb.mass;
 
-            // 4905 + (3 * 500) = 6405H - максимально можлива підйомна сила двигуна при TWR > 1
+            // 4905 + (3 * 500) = 6405H - максимально можлива підйомна сила двигуна
+            // 3 - з документації до хелікоптера
             float maxPossibleForce = gravityForce + (maxLiftForce * _rb.mass);
 
             // Нормалізація обертів двигуна від 0 до 1, щоб знати потужність від 0 до 100%
@@ -72,7 +73,7 @@ namespace HandlePhysics
             float airDensityFactor = Mathf.Clamp01(1f - (currentAltitude / maxAltitude));
 
             // Перемножуємо два чистих коефіцієнти: оберти двигуна та крок гвинта (ввід гравця)
-            // Приклад: 0.74 (оберти) * 0.50 (джойстик на половину) = 0.37
+            // Приклад: 0.74 (оберти) * 0.50 (клавіатура на половину) = 0.37
             float rawPowerCoeff = mormalizedRpm * _input.CollectiveInput;
 
             // Нелінійний ККД лопатей: підносимо загальну потужність до степеня 2/3 (0.66)
@@ -85,13 +86,14 @@ namespace HandlePhysics
             // Приклад: 6405Н * 0.515 * 0.25 = 824.64 Ньютонів підйомної сили
             float finalLiftMagnitude = maxPossibleForce * aerodynamicEfficiency * airDensityFactor;
             Vector3 liftForceVector = transform.up * finalLiftMagnitude;
-
-            // Debug-вивід для налаштування (можна вимкнути в релізі)
-            Debug.DrawRay(transform.position, liftForceVector / _rb.mass, Color.red);
+            _rb.AddForce(liftForceVector, ForceMode.Force);
         }
         
         private void HandleCyclic()
         {
+            // AddRelativeTorque
+            // обертає об'єкт навколо його власних, локальних осей.
+            // Тобто осей, які прив'язані до корпусу вертольота і крутяться разом із ним.
             float cyclicZForce = _input.CyclicInput.x * cyclingForce;
             _rb.AddRelativeTorque(Vector3.forward * cyclicZForce, ForceMode.Acceleration);
             
@@ -105,9 +107,11 @@ namespace HandlePhysics
             _rb.AddForce(finalCyclicDirection, ForceMode.Force);
         }
         
-        // поворот по осі
         private void HandlePedals()
         {
+            // AddTorque обертання навколо осі, у даному випадку вісь Y 
+            // Режим Acceleration каже фізичному рушію: "Мені байдуже, скільки важить цей вертоліт.
+            // Просто почни крутити його навколо своєї осі із заданим прискоренням"
             _rb.AddTorque(transform.up * (_input.PedalInput * tailForce), ForceMode.Acceleration);
         }
 
