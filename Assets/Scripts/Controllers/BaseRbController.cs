@@ -7,7 +7,7 @@ namespace Controllers
     {
         // вага 
         [SerializeField] private float weight = 500f;
-        // точка гравітації хелі, приблизно центр.
+        // точка гравітації, приблизно центр.
         [SerializeField] private Transform centerGravity;
         protected Rigidbody Rb;
 

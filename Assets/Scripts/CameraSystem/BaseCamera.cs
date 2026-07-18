@@ -84,8 +84,7 @@ namespace CameraSystem
                 float delta = currentMagnitude - maxDistance;
                 _wantedPos -= _wantedDir * (delta * Time.fixedDeltaTime * catchUpModifirier);
             }
-
-            // Take into account the height from the ground
+            
             float wantedHeight = height;
             RaycastHit hit;
             Ray groundRay = new Ray(transform.position, Vector3.down);

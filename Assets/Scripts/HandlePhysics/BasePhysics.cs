@@ -7,8 +7,12 @@ namespace HandlePhysics
     public class BasePhysics : MonoBehaviour
     {
         [Header("Lift Properties")] 
+        // maxLiftForce це коєфіціент тяги двигуна, зазвичай це параметр двигуна в документації до гелікоптера
+        // У реальній авіації є поняття Thrust-to-Weight Ratio (TWR) — відношення тяги до ваги
         [SerializeField] private float maxLiftForce = 3.0f;
+        // максимальна висота польоту.
         [SerializeField] private float maxAltitude = 200f;
+        // тертя повітря, коф втрат
         [SerializeField] private float aerodynamicEfficiencyExponent = 0.66f;
 
         [Header("Tail Rotor Properties")] 
@@ -48,69 +52,43 @@ namespace HandlePhysics
             HandlePedals();
         }
         
-        private void HandleLift()
-        {
-            AdvincePhysicsLift();
-            //SimplePhysicsLift();
-            //FreezeLift();
-        }
-
+        private void HandleLift() => AdvincePhysicsLift();
+        
         private void AdvincePhysicsLift()
         {
-            // 9.81 * 500 = 4905 - базова сила тяжіння (F = m * g) за Загорданом
+            // 9.81 * 500 = 4905Н - базова сила тяжіння (F = m * g) (4905 Ньютонів)
             float gravityForce = Physics.gravity.magnitude * _rb.mass;
-            // Розраховуємо повну силу .Компенсація ваги + надлишок для зльоту. Максимально можлива тяга гвинта
+
+            // 4905 + (3 * 500) = 6405H - максимально можлива підйомна сила двигуна при TWR > 1
             float maxPossibleForce = gravityForce + (maxLiftForce * _rb.mass);
-            // Нормалізація обертів двигуна
+
+            // Нормалізація обертів двигуна від 0 до 1, щоб знати потужність від 0 до 100%
+            // Приклад: 2000 RPM / 2700 MaxRPM = 0.74 (74% обертів)
             float mormalizedRpm = Mathf.Clamp01(_heliEngine.CurrentRpm / _heliEngine.MaxRpm);
-            // ефект щільності повітря 
+
+            // Ефект щільності повітря за статтею Загордана.
             float currentAltitude = transform.position.y;
+            // Приклад: 1 - 150 (поточна висота) / 200 (макс. висота) = 0.25 (коефіцієнт щільності)
             float airDensityFactor = Mathf.Clamp01(1f - (currentAltitude / maxAltitude));
-            
-            // 6. НЕЛЬНІЙНИЙ ККД ЗА ЗАГОРДАНОМ (Формула ступеня 2/3)
-            // Ми об'єднуємо оберти та колектив у загальний коефіцієнт потужності,
-            // а потім застосовуємо степінь 2/3 (0.66f) для імітації втрат ККД на тертя повітря об лопаті.
+
+            // Перемножуємо два чистих коефіцієнти: оберти двигуна та крок гвинта (ввід гравця)
+            // Приклад: 0.74 (оберти) * 0.50 (джойстик на половину) = 0.37
             float rawPowerCoeff = mormalizedRpm * _input.CollectiveInput;
+
+            // Нелінійний ККД лопатей: підносимо загальну потужність до степеня 2/3 (0.66)
+            // Математика для 0.37: 0.37 * 0.37 = 0.1369 -> кубічний корінь з 0.1369 = 0.515
             float aerodynamicEfficiency = Mathf.Pow(rawPowerCoeff, aerodynamicEfficiencyExponent);
-            
-            // 7. ФІНАЛЬНИЙ ВЕКТОР ПІДЙОМНОЇ СИЛИ
-            // Напрямок: завжди локальний "верх" вертольота (transform.up).
-            // Величина: Максимальна сила * Ефективність лопатей * Щільність повітря на цій висоті.
+
+            // Фінальний вектор
+            // Напрямок: завжди локальний верх вертольота (transform.up)
+            // Величина: Максимальна сила * Ефективність лопатей * Щільність повітря
+            // Приклад: 6405Н * 0.515 * 0.25 = 824.64 Ньютонів підйомної сили
             float finalLiftMagnitude = maxPossibleForce * aerodynamicEfficiency * airDensityFactor;
             Vector3 liftForceVector = transform.up * finalLiftMagnitude;
 
-            // 8. ЗАСТОСУВАННЯ ФІЗИЧНОЇ СИЛИ
-            // Використовуємо ForceMode.Force, який враховує масу вертольота і FixedUpdate-інтервал.
-            _rb.AddForce(liftForceVector, ForceMode.Force);
-
             // Debug-вивід для налаштування (можна вимкнути в релізі)
-            Debug.DrawRay(transform.position, liftForceVector / _rb.mass, Color.green);
+            Debug.DrawRay(transform.position, liftForceVector / _rb.mass, Color.red);
         }
-
-        #region Unused Methods
-        /// <summary>
-        /// F = m * g (сила гравітації * масу = сила тяжості)
-        /// Physics.gravity.magnitude = 9.81
-        /// mass = 500
-        /// Vector3(0, 1, 0) * 9.81 * 500 = Vector3(0, 4905, 0)
-        /// Vector3 liftForce = transform.up * (Physics.gravity.magnitude * rb.mass);
-        /// rb.AddForce(liftForce, ForceMode.Force);
-        /// ForceMode.Force - постійно використовуємо силу
-        /// </summary>
-        private void SimplePhysicsLift()
-        {
-            Vector3 liftForce = transform.up * ((Physics.gravity.magnitude + maxLiftForce) * _rb.mass);
-            // коєфіціент обертання гвинта 1 до 6
-            float normalizedRpm = _heliEngine.CurrentRpm / 6f;
-            _rb.AddForce(liftForce * (Mathf.Pow(normalizedRpm, 2f) * Mathf.Pow(_input.CollectiveInput, 2f)), ForceMode.Force);
-        }
-
-        private void FreezePhysicsLift()
-        {
-            Vector3 liftForce = transform.up * (Physics.gravity.magnitude * _rb.mass);
-            _rb.AddForce(liftForce, ForceMode.Force);
-        }
-        #endregion
         
         private void HandleCyclic()
         {
