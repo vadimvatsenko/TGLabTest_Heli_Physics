@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Characteristics;
 using Engines;
+using HandlePhysics;
 using InputSystem;
 using UnityEngine;
 
@@ -27,8 +27,7 @@ namespace Controllers
             HandleRotors();
             HandleCharacteristics();
         }
-
-        // тут доробити, на випадок якщо декілька двигунів
+        
         private void HandleRotors()
         {
             foreach (var engine in engines)
@@ -44,7 +43,7 @@ namespace Controllers
 
         protected virtual void HandleCharacteristics()
         {
-            _basePhysics.UpdateCharacterictics();
+            _basePhysics.UpdateAllPhysics();
         }
     }
 }

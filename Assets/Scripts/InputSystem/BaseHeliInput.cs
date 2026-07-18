@@ -6,14 +6,14 @@ namespace InputSystem
 {
     public class BaseHeliInput : MonoBehaviour
     {
-        // Доделать Sensitivity, занадто швидко йде перемикання між одниницею та нулем
+        // Робити Sensitivity, занадто швидко йде перемикання між одниницею та нулем
         [SerializeField] private float delayInput = 4; // зараз дуже швидко йде перемикання 
+        
         private InputSystem_Actions _inputSystemActions;
         
         // throttleInput - ручка газу / Керування потужністю двигуна
         private float _throttleInputFromInput;
         public float ThrottleInput { get; private set; } = 0f;
-        
         private bool _isHoldingThrottleInput = false;
         
         // collective - загальний кут установки лопатей несного гвинта, керування висотою

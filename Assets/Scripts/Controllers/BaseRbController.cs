@@ -17,11 +17,7 @@ namespace Controllers
             Rb.mass = weight;
         }
         
-        private void FixedUpdate()
-        {
-            HandlePhysics();
-        }
-
+        private void FixedUpdate() => HandlePhysics();
         protected virtual void HandlePhysics() { }
     }
 }

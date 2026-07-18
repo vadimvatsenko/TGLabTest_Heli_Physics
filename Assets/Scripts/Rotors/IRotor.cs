@@ -1,7 +1,9 @@
 using InputSystem;
-using UnityEngine;
 
-public interface IRotor
+namespace Rotors
 {
-    void UpdateRotor(float dps, BaseHeliInput input);
+    public interface IRotor
+    {
+        void UpdateRotor(float dps, BaseHeliInput input);
+    }
 }

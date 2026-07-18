@@ -2,7 +2,7 @@
 using InputSystem;
 using UnityEngine;
 
-namespace Characteristics
+namespace HandlePhysics
 {
     public class BasePhysics : MonoBehaviour
     {
@@ -21,7 +21,7 @@ namespace Characteristics
         [Header("Auto Level Properties")] 
         [SerializeField] private float autoLevelForce = 2f;
 
-        // змінні для розрахунку нахилу 
+        // змінні для розрахунку нахилу та стабілізації
         private Vector3 _flatForward;
         private float _forwardDot;
         private Vector3 _flatRight;
@@ -39,29 +39,16 @@ namespace Characteristics
             _heliEngine = GetComponentInChildren<MainHeliEngine>();
         }
         
-        public void UpdateCharacterictics()
+        public void UpdateAllPhysics()
         {
             CalculateAngles();
-            Autolevel();
+            AutoLevel();
             HandleLift();
             HandleCyclic();
             HandlePedals();
         }
-
-        /// <summary>
-        /// F = m * g (сила гравітації * масу = сила тяжості)
-        /// Physics.gravity.magnitude = 9.81
-        /// mass = 500
-        /// Vector3(0, 1, 0) * 9.81 * 500 = Vector3(0, 4905, 0)
-        /// Vector3 liftForce = transform.up * (Physics.gravity.magnitude * rb.mass);
-        /// rb.AddForce(liftForce, ForceMode.Force);
-        /// ForceMode.Force - постійно використовуємо силу
-        /// </summary>
-
-        ///<summary>
-        /// 
-        /// </summary>>
-        protected virtual void HandleLift()
+        
+        private void HandleLift()
         {
             AdvincePhysicsLift();
             //SimplePhysicsLift();
@@ -100,6 +87,16 @@ namespace Characteristics
             Debug.DrawRay(transform.position, liftForceVector / _rb.mass, Color.green);
         }
 
+        #region Unused Methods
+        /// <summary>
+        /// F = m * g (сила гравітації * масу = сила тяжості)
+        /// Physics.gravity.magnitude = 9.81
+        /// mass = 500
+        /// Vector3(0, 1, 0) * 9.81 * 500 = Vector3(0, 4905, 0)
+        /// Vector3 liftForce = transform.up * (Physics.gravity.magnitude * rb.mass);
+        /// rb.AddForce(liftForce, ForceMode.Force);
+        /// ForceMode.Force - постійно використовуємо силу
+        /// </summary>
         private void SimplePhysicsLift()
         {
             Vector3 liftForce = transform.up * ((Physics.gravity.magnitude + maxLiftForce) * _rb.mass);
@@ -113,18 +110,25 @@ namespace Characteristics
             Vector3 liftForce = transform.up * (Physics.gravity.magnitude * _rb.mass);
             _rb.AddForce(liftForce, ForceMode.Force);
         }
-
-        protected virtual void HandleCyclic()
+        #endregion
+        
+        private void HandleCyclic()
         {
             float cyclicZForce = _input.CyclicInput.x * cyclingForce;
             _rb.AddRelativeTorque(Vector3.forward * cyclicZForce, ForceMode.Acceleration);
             
             float cyclicXForce = _input.CyclicInput.y * cyclingForce;
             _rb.AddRelativeTorque(Vector3.right * cyclicXForce, ForceMode.Acceleration);
+            
+            Vector3 forwardVector = _flatForward * _forwardDot;
+            Vector3 rightVector = _flatRight * _rightDot;
+            Vector3 finalCyclicDirection 
+                = Vector3.ClampMagnitude(forwardVector + rightVector, 1f) * (cyclingForce * cyclicForceMultiplier) ;
+            _rb.AddForce(finalCyclicDirection, ForceMode.Force);
         }
         
         // поворот по осі
-        protected virtual void HandlePedals()
+        private void HandlePedals()
         {
             _rb.AddTorque(transform.up * (_input.PedalInput * tailForce), ForceMode.Acceleration);
         }
@@ -143,7 +147,7 @@ namespace Characteristics
             _rightDot = Vector3.Dot(transform.up, _flatRight);
         }
 
-        private void Autolevel()
+        private void AutoLevel()
         {
             float rightForce = -_forwardDot * autoLevelForce;
             float forwardForce = _rightDot * autoLevelForce;
