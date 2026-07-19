@@ -41,9 +41,6 @@ namespace Controllers
             engines.ForEach(e => e.UpdateEngine(_baseHeliInput.ThrottleInput));
         }
 
-        protected virtual void HandleCharacteristics()
-        {
-            _basePhysics.UpdateAllPhysics();
-        }
+        protected virtual void HandleCharacteristics() => _basePhysics.UpdateAllPhysics();
     }
 }

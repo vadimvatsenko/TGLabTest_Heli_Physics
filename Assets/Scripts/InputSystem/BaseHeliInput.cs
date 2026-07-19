@@ -58,7 +58,6 @@ namespace InputSystem
             }
             
             ThrottleInput = Mathf.Clamp01(ThrottleInput);
-            //Debug.Log(ThrottleInput);
         }
 
         private void StickyCollectiveInput()

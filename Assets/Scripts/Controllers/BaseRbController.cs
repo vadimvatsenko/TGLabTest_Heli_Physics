@@ -5,9 +5,7 @@ namespace Controllers
 {
     public class BaseRbController : MonoBehaviour
     {
-        // вага 
         [SerializeField] private float weight = 500f;
-        // точка гравітації, приблизно центр.
         [SerializeField] private Transform centerGravity;
         protected Rigidbody Rb;
 

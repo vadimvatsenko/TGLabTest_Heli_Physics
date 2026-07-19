@@ -8,7 +8,7 @@ namespace HandlePhysics
     {
         [Header("Lift Properties")] 
         // maxLiftForce це коєфіціент тяги двигуна, зазвичай це параметр двигуна в документації до гелікоптера
-        // У реальній авіації є поняття Thrust-to-Weight Ratio (TWR) — відношення тяги до ваги
+        // У реальній авіації є поняття Thrust-to-Weight Ratio TWR — відношення тяги до ваги
         [SerializeField] private float maxLiftForce = 3.0f;
         // максимальна висота польоту.
         [SerializeField] private float maxAltitude = 200f;
@@ -52,9 +52,9 @@ namespace HandlePhysics
             HandlePedals();
         }
         
-        private void HandleLift() => AdvincePhysicsLift();
+        private void HandleLift() => AdvicePhysicsLift();
         
-        private void AdvincePhysicsLift()
+        private void AdvicePhysicsLift()
         {
             // 9.81 * 500 = 4905Н - базова сила тяжіння (F = m * g) (4905 Ньютонів)
             float gravityForce = Physics.gravity.magnitude * _rb.mass;
@@ -72,7 +72,7 @@ namespace HandlePhysics
             // Приклад: 1 - 150 (поточна висота) / 200 (макс. висота) = 0.25 (коефіцієнт щільності)
             float airDensityFactor = Mathf.Clamp01(1f - (currentAltitude / maxAltitude));
 
-            // Перемножуємо два чистих коефіцієнти: оберти двигуна та крок гвинта (ввід гравця)
+            // Перемножуємо два чистих коефіцієнти: оберти двигуна та крок гвинта (ввід)
             // Приклад: 0.74 (оберти) * 0.50 (клавіатура на половину) = 0.37
             float rawPowerCoeff = mormalizedRpm * _input.CollectiveInput;
 
