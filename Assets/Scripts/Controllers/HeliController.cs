@@ -25,7 +25,7 @@ namespace Controllers
         {
             HandleEngines();
             HandleRotors();
-            HandleCharacteristics();
+            HandleUpdatePhysics();
         }
         
         private void HandleRotors()
@@ -41,6 +41,6 @@ namespace Controllers
             engines.ForEach(e => e.UpdateEngine(_baseHeliInput.ThrottleInput));
         }
 
-        protected virtual void HandleCharacteristics() => _basePhysics.UpdateAllPhysics();
+        protected virtual void HandleUpdatePhysics() => _basePhysics.UpdateAllPhysics();
     }
 }

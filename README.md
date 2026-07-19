@@ -11,28 +11,119 @@
 title: HeliPhysics
 ---
 classDiagram
-    note "From Duck till Zebra"
-    Animal <|-- Duck
-    note for Duck "can fly<br>can swim<br>can dive<br>can help in debugging"
-    Animal <|-- Fish
-    Animal <|-- Zebra
-    Animal : +int age
-    Animal : +String gender
-    Animal: +isMammal()
-    Animal: +mate()
-    class Duck{
-        +String beakColor
-        +swim()
-        +quack()
+    namespace HeliObj {
+        class HeliGroup
+        class CenterPointGravity
+        class Body
+        class Engines
+        class MainEngine
+        class Legs
+        class R
+        class L
+        class RotorController
+        class MainRotor
+        class TailRotor
+        class Tail
+        class Rigidbody
+        
+        class BaseHeliInput
+        class BasePhysics
+        class BaseRbController
+        class HeliController
+        
+        class MainHeliEngine
+        
+        
     }
-    class Fish{
-        -int sizeInFeet
-        -canEat()
-    }
-    class Zebra{
-        +bool is_wild
-        +run()
-    }
+    
+    HeliGroup -- CenterPointGravity
+    HeliGroup -- Body
+    HeliGroup -- Engines
+    HeliGroup -- Legs
+    HeliGroup -- RotorController
+    HeliGroup -- Tail
+    Engines -- MainEngine
+    Legs -- R
+    Legs -- L
+    RotorController -- MainRotor
+    RotorController -- TailRotor
+    
+    HeliGroup ..> Rigidbody
+    HeliGroup ..> BaseHeliInput
+    HeliGroup ..> BasePhysics
+    
+    BasePhysics ..> Rigidbody
+    BasePhysics ..> BaseHeliInput
+    BasePhysics ..> MainHeliEngine
+    
+    HeliController --|> BaseRbController : Inheritance
+    
+    BaseHeliInput : + int float delayInput
+    BaseHeliInput : - InputSystem_Actions _inputSystemActions
+    BaseHeliInput : - float _throttleInputFromInput
+    BaseHeliInput : + float ThrottleInput
+    BaseHeliInput : - bool _isHoldingThrottleInput
+    BaseHeliInput : + float CollectiveInput
+    BaseHeliInput : - float _collectiveInputFromInput
+    BaseHeliInput : - bool _isHoldingCollectiveInput
+    BaseHeliInput : + Vector2 CyclicInput
+    BaseHeliInput : - float PedalInput
+    BaseHeliInput : - OnEnable()
+    BaseHeliInput : - Update()
+    BaseHeliInput : - StickyThrottleInput()
+    BaseHeliInput : - StickyCollectiveInput()
+    BaseHeliInput : - OnCyclicPerformed(InputAction.CallbackContext context)
+    BaseHeliInput : - OnCyclicCanceled(InputAction.CallbackContext context)
+    BaseHeliInput : - OnThrottleInputPerformed(InputAction.CallbackContext context)
+    BaseHeliInput : - OnThrottleInputCanceled(InputAction.CallbackContext context)
+    BaseHeliInput : - OnCollectiveInputPerformed(InputAction.CallbackContext context)
+    BaseHeliInput : - OnCollectiveInputCanceled(InputAction.CallbackContext context)
+    BaseHeliInput : - OnPedalInputPerformed(InputAction.CallbackContext context)
+    BaseHeliInput : - OnPedalInputCanceled(InputAction.CallbackContext context)
+    BaseHeliInput : - OnDisable()
+    
+    BasePhysics: + float maxLiftForce
+    BasePhysics: + float maxAltitude
+    BasePhysics: + float aerodynamicEfficiencyExponent
+    BasePhysics: + float tailForce
+    BasePhysics: + float cyclingForce
+    BasePhysics: + float cyclicForceMultiplier
+    BasePhysics: + float autoLevelForce
+    BasePhysics: + Vector3 _flatForward
+    BasePhysics: + float _forwardDot
+    BasePhysics: + Vector3 _flatRight
+    BasePhysics: + float _rightDot
+    BasePhysics: + MainHeliEngine _heliEngine
+    BasePhysics: + Rigidbody _rb
+    BasePhysics: + BaseHeliInput _input
+    BasePhysics: + Start()
+    BasePhysics: + UpdateAllPhysics()
+    BasePhysics: + HandleLift()
+    BasePhysics: + AdvicePhysicsLift()
+    BasePhysics: + HandleCyclic()
+    BasePhysics: + HandlePedals()
+    BasePhysics: + CalculateAngles()
+    BasePhysics: + AutoLevel()
+    
+    BaseRbController: - float weight
+    BaseRbController: - Transform centerGravity
+    BaseRbController: # Rigidbody Rb
+    BaseRbController: - Awake()
+    BaseRbController: - FixedUpdate()
+    BaseRbController: # HandlePhysics()
+    
+    HeliController : + List~MainHeliEngine~ engines
+    HeliController : + BaseHeliInput _baseHeliInput
+    HeliController : + RotorController _rotorController
+    HeliController : + BasePhysics _basePhysics
+    HeliController : + Start()
+    HeliController : + HandlePhysics()
+    HeliController : + HandleRotors()
+    HeliController : + HandleEngines()
+    HeliController : + HandleUpdatePhysics()
+    
+    
+    
 ```
 
 
