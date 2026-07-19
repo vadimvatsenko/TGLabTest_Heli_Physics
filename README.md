@@ -20,7 +20,7 @@ classDiagram
         class Legs
         class R
         class L
-        class RotorController
+        class RotorControllerObj
         class MainRotor
         class TailRotor
         class Tail
@@ -32,6 +32,7 @@ classDiagram
         class HeliController
         
         class MainHeliEngine
+        class RotorController
         
         
     }
@@ -51,12 +52,24 @@ classDiagram
     HeliGroup ..> Rigidbody
     HeliGroup ..> BaseHeliInput
     HeliGroup ..> BasePhysics
+    HeliGroup ..> HeliControllerObj
     
     BasePhysics ..> Rigidbody
     BasePhysics ..> BaseHeliInput
     BasePhysics ..> MainHeliEngine
     
     HeliController --|> BaseRbController : Inheritance
+    HeliController ..> MainHeliEngine : Dependency
+    HeliController ..> BaseHeliInput : Dependency
+    HeliController ..> RotorController : Dependency
+    
+    HeliGroup : Rigidbody
+    HeliGroup : BaseHeliInput
+    HeliGroup : BasePhysics
+    HeliGroup : HeliController
+    
+    Body : CapsuleCollider
+    RotorControllerObj : RotorController
     
     BaseHeliInput : + int float delayInput
     BaseHeliInput : - InputSystem_Actions _inputSystemActions
@@ -121,6 +134,19 @@ classDiagram
     HeliController : + HandleRotors()
     HeliController : + HandleEngines()
     HeliController : + HandleUpdatePhysics()
+    
+    MainHeliEngine : - float maxHp
+    MainHeliEngine : - float maxRpm
+    MainHeliEngine : - float engineResponseTime
+    MainHeliEngine : - AnimationCurve powerCurve
+    MainHeliEngine : + Action~float~ OnChangeCurrentHp
+    MainHeliEngine : + Action~float~ OnChangeCurrentRpm
+    MainHeliEngine : - float _lastSentHp
+    MainHeliEngine : - float _lastSentRpm
+    MainHeliEngine : + float CurrentHp
+    MainHeliEngine : + float CurrentRpm
+    MainHeliEngine : + UpdateEngine(float throttleInput)
+    
     
     
     
