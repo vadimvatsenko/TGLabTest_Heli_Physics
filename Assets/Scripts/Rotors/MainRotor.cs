@@ -18,11 +18,12 @@ namespace Rotors
             float pitch = input.CollectiveInput * maxPitch;
             OnRotate?.Invoke(pitch);
             // оберт 
-            transform.Rotate(Vector3.up, dps);
+            transform.Rotate(Vector3.up, dps, Space.Self);
+            
             if (lFirstRotor && rFirstRotor)
             {
-                lFirstRotor.localRotation = Quaternion.Euler(0f, 0f, pitch);
-                rFirstRotor.localRotation = Quaternion.Euler(0f, 0f, -pitch);
+                lFirstRotor.localRotation = Quaternion.Euler(pitch, 0f, 0f );
+                rFirstRotor.localRotation = Quaternion.Euler(-pitch, 0f, 0f);
             }
         }
     }
